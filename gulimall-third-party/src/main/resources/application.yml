@@ -1,0 +1,22 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    alicloud:
+      access-key: LTAI5tAH1JYtoSLbUkQJGWtc
+      secret-key: RHNY3xHtK6jEPpWepuwifOIHTNyIgs
+      oss:
+        endpoint: oss-cn-shanghai.aliyuncs.com
+        bucket: gulimall-yibo
+  application:
+    name: gulimall-third-party
+server:
+  port: 30000
+tencent:
+  sms:
+    secretId: AKIDXu0qQjlXhaCYdRyFH2WpsfBQP7YibEZd
+    secretKey: pOhjX5MM6ZmiNltlMfiUzD9pELBlRqyp
+    appId: 1400635251
+    templateId: 1308043
+    sign: "一波的笔记"

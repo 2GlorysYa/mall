@@ -1,0 +1,22 @@
+#spring:
+#  datasource:
+#    username: root
+#    password: root
+#    url: jdbc:mysql://192.168.50.10:3306/gulimall_sms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: localhost:8848
+#  application:
+#    name: gulimall-coupon # 每个服务必须声明名字才能在nacos注册
+#mybatis-plus:
+#  mapper-locations: classpath*:/mapper/**/*.xml # classpath*表明不止扫描自己的类路径，其他的依赖的类路径也会扫描
+#  global-config:
+#    db-config:
+#      id-type: auto # 设置主键自增，因为MyBtaisPlus的@TableId默认IdType是None非自增
+#server:
+#  port: 7001
+#user:
+#  name: zhangsan
+#  age: 18

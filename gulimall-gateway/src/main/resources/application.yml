@@ -1,0 +1,76 @@
+spring:
+  cloud:
+    gateway:
+      routes: # 设定网关的路由规则
+#        - id: test_route    # 每个route是一个list集合，cmd点进去看, - 对应一个list
+#          uri: https://www.baidu.com  # 路由到uri
+#          predicates: # 断言，每个predicate是一个list集合
+#            - Query=url,baidu # 如果请求参数包含url或baidu，gateway就把路由到该uri
+
+        - id: product_route
+          uri: lb://gulimall-product
+          predicates:
+            -Path=/api/product/**
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+
+        - id: third_party_route
+          uri: lb://gulimall-third-party
+          predicates:
+            - Path=/api/thirdparty/**
+          filters:
+            - RewritePath=/api/thirdparty/(?<segment>.*), /$\{segment}  # 只留下/oss/policy
+
+        - id: member_route
+          uri: lb://gulimall-member
+          predicates:
+            - Path=/api/member/**
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}  # 去掉api，剩下的保留
+
+        - id: ware_rout
+          uri: lb://gulimall-ware
+          predicates:
+            - Path=/api/ware/**
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+
+        - id: admin_route
+          uri: lb://renren-fast # lb负载均衡
+          predicates:
+            - Path=/api/**
+          filters:
+            - RewritePath=/api/(?<segment>.*), /renren-fast/$\{segment}
+
+        - id: gulimall_host_route
+          uri: lb://gulimall-product
+          predicates: # 选择路由断言工厂Route Predicate Factories里的Host Route Predicate Factory
+            - Host=gulimall.com, item.gulimall.com
+
+        - id: gulimall_search_route
+          uri: lb://gulimall-search
+          predicates:
+            - Host=search.gulimall.com
+
+        - id: gulimall_auth_route
+          uri: lb://gulimall-auth-server
+          predicates:
+            - Host=auth.gulimall.com
+
+        - id: gulimall_cart_route
+          uri: lb://gulimall-cart
+          predicates:
+            - Host=cart.gulimall.com
+
+
+# 验证码请求：因为vue前台的api请求接口已经统一设置为网关，所以前台发送的验证码请求会经过网关过滤器来修改请求, 将发送过来的/api/captcha.jpg修改成
+# /renren-fast/captcha.jpg， segment表示/后的片段(captcha.jpg)所以实际发出去的请求是指定的uri+重写后的路径
+# localhost:80/api/captcha.jpg 人人前端发的验证码请求会被转发给网关888端口，再由网关检测出url中的api，路由给人人fast后台
+# renren-fast:8080/api/captcha.jpg
+
+# 三级分类请求：由于vue前台api请求接口后缀带/api, 所以只需要重写路径，将这个api去掉，保留后面的内容即可
+# 需要注意的是这个请求要放在验证码请求上面，具备更高优先级，否则会被/api/**路由走
+
+
+
+
